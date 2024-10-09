@@ -48,6 +48,17 @@ app.post('/submit', async (req, res) => {
   }
 });
 
+// Маршрут для отримання всіх контактів з бази даних
+app.get('/contacts', async (req, res) => {
+  try {
+    const contacts = await Contact.find();
+    res.json(contacts);
+  } catch (error) {
+    console.error('Помилка отримання даних:', error);
+    res.status(500).send('Помилка при отриманні даних.');
+  }
+});
+
 // Запуск сервера
 app.listen(port, () => {
   console.log(`Сервер запущено на порту ${port}`);
