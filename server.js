@@ -50,7 +50,7 @@ app.use((req, res, next) => {
 // Обмеження швидкості запитів (Rate Limiting)
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 хвилин
-  max: 100, // Максимум 100 запитів з одного IP
+  max: 1000, // Максимум 100 запитів з одного IP
   message: 'Занадто багато запитів з цієї IP-адреси, спробуйте пізніше'
 });
 
@@ -60,15 +60,23 @@ app.use(limiter);
 // Плавне зниження швидкості обробки запитів
 const speedLimiter = slowDown({
   windowMs: 15 * 60 * 1000, // 15 хвилин
-  delayAfter: 100, // Після 100 запитів
+  delayAfter: 20, // Після 100 запитів
   delayMs: (used, req) => {
     const delayAfter = req.slowDown.limit;
-    return (used - delayAfter) * 500; // Old behavior
+    return (used - delayAfter) * 500;
   }
 });
 
 // Використання зниження швидкості для всіх запитів
 app.use(speedLimiter);
+
+// Мідлвара для повідомлення про сповільнення
+app.use((req, res, next) => {
+  if (req.slowDown && req.slowDown.used > req.slowDown.limit) {
+    res.status(455).send('Запити сповільнені. Будь ласка, спробуйте пізніше.'); // Встановлюємо заголовок з повідомленням
+  }
+  next();
+});
 
 // Маршрут для обслуговування HTML-форми
 app.get('/', (req, res) => {
