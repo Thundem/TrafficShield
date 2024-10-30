@@ -86,7 +86,6 @@
       background-color: #f9f9f9;
     }
 
-    /* Styling for alternate row colors */
     #contacts-table tbody tr:nth-child(even) {
       background-color: #e9f5ff;
     }
@@ -123,7 +122,6 @@
       </tr>
     </thead>
     <tbody id="contacts-table-body">
-      <!-- Контактні дані будуть завантажені сюди -->
     </tbody>
   </table>
 
@@ -136,17 +134,14 @@
   </div>
 
   <script>
-    // Функція для показу модального вікна
     function showModal() {
       document.getElementById('success-modal').style.display = 'flex';
     }
 
-    // Функція для закриття модального вікна
     function closeModal() {
       document.getElementById('success-modal').style.display = 'none';
     }
 
-    // Обробка подання форми через AJAX
     document.getElementById('contact-form').addEventListener('submit', async function(event) {
       event.preventDefault();
 
@@ -167,9 +162,8 @@
         });
 
         if (response.ok) {
-          // Показуємо модальне вікно при успіху
           showModal();
-          document.getElementById('contact-form').reset();  // Очищуємо форму
+          document.getElementById('contact-form').reset();
         } else {
           alert('Помилка при відправці даних. Спробуйте ще раз.');
         }
@@ -187,7 +181,7 @@
           const contacts = await response.json();
   
           const tableBody = document.getElementById('contacts-table-body');
-          tableBody.innerHTML = ''; // Очищуємо таблицю перед завантаженням нових даних
+          tableBody.innerHTML = '';
   
           contacts.forEach(contact => {
             const row = document.createElement('tr');
@@ -205,7 +199,6 @@
         }
       }
   
-      // Завантажуємо контакти при завантаженні сторінки
       window.onload = loadContacts;
     </script>
 </body>
