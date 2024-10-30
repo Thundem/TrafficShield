@@ -1,6 +1,8 @@
 {
   "dependencies": {
     "express": "^4.21.0",
+    "express-rate-limit": "^7.4.1",
+    "express-slow-down": "^2.0.3",
     "mongodb": "^6.9.0",
     "mongoose": "^8.7.0"
   },
