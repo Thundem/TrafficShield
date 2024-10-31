@@ -29,7 +29,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Визначення заблокованих IP-адрес
-const blockedIPs = ['192.168.1.1', '10.0.0.1']; // Додайте IP, які потрібно заблокувати
+const blockedIPs = ['192.168.1.1', '10.0.0.1', '91.214.209.58']; // Додайте IP, які потрібно заблокувати
 
 // Мідлвара для блокування IP-адрес
 app.use((req, res, next) => {
@@ -86,15 +86,17 @@ app.get('/', (req, res) => {
 // Маршрут для обробки даних форми
 app.post('/submit', async (req, res) => {
   const { name, phone, email, message } = req.body;
-
   const contact = new Contact({ name, phone, email, message });
 
   try {
     await contact.save();
-    return res.send('Дані успішно надіслано!');
+    res.send('Дані успішно надіслано!');  // Відповідь надсилається один раз
   } catch (error) {
     console.error('Помилка збереження даних:', error);
-    return res.status(500).send('Помилка при збереженні даних.');
+
+    if (!res.headersSent) {  // Перевірка, чи заголовки вже були відправлені
+      res.status(500).send('Помилка при збереженні даних.');
+    }
   }
 });
 
